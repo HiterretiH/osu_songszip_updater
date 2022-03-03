@@ -1,4 +1,13 @@
-class CurrentProgress:
+from abc import ABC, abstractmethod
+
+
+class Progress(ABC):
+    @abstractmethod
+    def get_progress(self) -> float:
+        ...
+
+
+class FloatProgress(Progress):
     def __init__(self):
         self.__progress = 0
 
@@ -9,7 +18,7 @@ class CurrentProgress:
         return self.__progress
 
 
-class CurrentProgressList(CurrentProgress):
+class ListProgress(Progress):
     def __init__(self, counter: list[int]):
         super().__init__()
         if len(counter) < 2:

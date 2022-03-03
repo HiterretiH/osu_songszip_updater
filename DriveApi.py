@@ -1,7 +1,7 @@
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from CurrentProgress import CurrentProgress
+from Progress import FloatProgress
 from threading import Thread
 
 
@@ -10,12 +10,12 @@ class DriveApi:
         credentials = service_account.Credentials.from_service_account_file(credentials_file)
         self._service = build("drive", "v3", credentials=credentials)
 
-    def update_file(self, file_id: str, filename: str) -> CurrentProgress:
-        progress = CurrentProgress()
+    def update_file(self, file_id: str, filename: str) -> FloatProgress:
+        progress = FloatProgress()
         Thread(target=self.__update_file_thread, args=(file_id, filename, progress)).start()
         return progress
 
-    def __update_file_thread(self, file_id: str, filename: str, progress: CurrentProgress):
+    def __update_file_thread(self, file_id: str, filename: str, progress: FloatProgress):
         try:
             media = MediaFileUpload(filename, resumable=True)
             request = self._service.files().update(fileId=file_id, media_body=media)
